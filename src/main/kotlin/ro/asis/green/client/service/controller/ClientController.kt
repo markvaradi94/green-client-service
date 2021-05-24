@@ -35,7 +35,9 @@ class ClientController(
     fun addBagToCart(
         @PathVariable clientId: String,
         @RequestBody bag: GreenBagDto
-    ) = clientService.addBagToCart(clientId, greenBagMapper.toEntity(bag))
+    ) = clientMapper.toApi(
+        clientService.addBagToCart(clientId, greenBagMapper.toEntity(bag))
+    )
 
     //TODO add functionality for deleting a bag from the client cart
 
@@ -43,7 +45,9 @@ class ClientController(
     fun updateClientCart(
         @PathVariable clientId: String,
         @RequestBody cart: Cart
-    ) = clientService.updateCartForClient(clientId, cart)
+    ) = clientMapper.toApi(
+        clientService.updateCartForClient(clientId, cart)
+    )
 
     @PostMapping
     fun addClient(@RequestBody client: ClientDto) = clientMapper.toApi(
