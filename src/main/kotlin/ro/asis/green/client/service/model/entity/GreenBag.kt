@@ -1,5 +1,7 @@
 package ro.asis.green.client.service.model.entity
 
 data class GreenBag(
-    val items: List<Item>
+    var description: String? = null,
+    var price: Double? = null,
+    var imageUrl: String? = null
 )

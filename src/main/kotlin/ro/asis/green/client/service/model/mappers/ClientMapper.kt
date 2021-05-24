@@ -19,7 +19,7 @@ class ClientMapper(
             accountId = source.accountId,
             firstName = source.firstName,
             lastName = source.lastName,
-            addresses = addressMapper.toApi(source.addresses) ?: listOf(),
+            addresses = addressMapper.toApi(source.addresses) ?: mutableListOf(),
             cart = source.cart
         )
     }
@@ -30,7 +30,7 @@ class ClientMapper(
             accountId = source.accountId,
             firstName = source.firstName,
             lastName = source.lastName,
-            addresses = addressMapper.toEntity(source.addresses) ?: listOf(),
+            addresses = addressMapper.toEntity(source.addresses) ?: mutableListOf(),
             cart = source.cart
         )
     }

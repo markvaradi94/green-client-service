@@ -7,6 +7,6 @@ data class AddressDto(
     var streetNumber: String? = null,
     var building: String? = null,
     var staircase: String? = null,
-    var floor: String? = null,
+    var floor: Int? = null,
     var flat: String? = null
 )

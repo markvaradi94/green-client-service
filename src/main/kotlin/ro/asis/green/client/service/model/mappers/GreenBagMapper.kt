@@ -1,23 +1,21 @@
 package ro.asis.green.client.service.model.mappers
 
 import org.springframework.stereotype.Component
-import ro.asis.green.client.service.model.api.dto.ItemDto
-import ro.asis.green.client.service.model.entity.Item
+import ro.asis.green.client.service.model.api.dto.GreenBagDto
+import ro.asis.green.client.service.model.entity.GreenBag
 
 @Component
-class ItemMapper : Mapper<ItemDto, Item> {
-    override fun toApi(source: Item): ItemDto {
-        return ItemDto(
-            name = source.name,
+class GreenBagMapper : Mapper<GreenBagDto, GreenBag> {
+    override fun toApi(source: GreenBag): GreenBagDto {
+        return GreenBagDto(
             description = source.description,
             price = source.price,
             imageUrl = source.imageUrl
         )
     }
 
-    override fun toEntity(source: ItemDto): Item {
-        return Item(
-            name = source.name,
+    override fun toEntity(source: GreenBagDto): GreenBag {
+        return GreenBag(
             description = source.description,
             price = source.price,
             imageUrl = source.imageUrl
