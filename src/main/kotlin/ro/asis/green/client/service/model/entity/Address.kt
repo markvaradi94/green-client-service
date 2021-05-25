@@ -7,6 +7,8 @@ data class Address(
     var streetNumber: String? = null,
     var building: String? = null,
     var staircase: String? = null,
-    var floor: String? = null,
+    var floor: Int? = null,
     var flat: String? = null
+
+    //TODO add something to keep trace of the current activeAddress
 )

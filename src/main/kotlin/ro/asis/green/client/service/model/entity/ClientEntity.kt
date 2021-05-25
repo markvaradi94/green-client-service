@@ -22,7 +22,7 @@ class ClientEntity(
     var lastName: String?,
 
     @NotNull
-    var addresses: List<Address>? = listOf(),
+    var addresses: List<Address>? = mutableListOf(),
 
     var cart: Cart? = Cart()
 )
