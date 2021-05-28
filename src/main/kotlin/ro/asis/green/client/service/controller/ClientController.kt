@@ -1,69 +1,70 @@
 package ro.asis.green.client.service.controller
 
 import org.springframework.web.bind.annotation.*
-import ro.asis.green.client.service.exceptions.ClientNotFoundException
 import ro.asis.green.client.service.model.api.dto.ClientDto
-import ro.asis.green.client.service.model.api.dto.GreenBagDto
+import ro.asis.green.client.service.model.entity.Address
 import ro.asis.green.client.service.model.entity.Cart
+import ro.asis.green.client.service.model.entity.GreenBag
 import ro.asis.green.client.service.model.filters.ClientFilters
-import ro.asis.green.client.service.model.mappers.ClientMapper
-import ro.asis.green.client.service.model.mappers.GreenBagMapper
 import ro.asis.green.client.service.service.ClientService
 
 @RestController
 @RequestMapping("clients")
 class ClientController(
     private val clientService: ClientService,
-    private val clientMapper: ClientMapper,
-    private val greenBagMapper: GreenBagMapper
 ) {
     @GetMapping
-    fun getAllClients(filters: ClientFilters) = clientMapper.toApi(
-        clientService.findAll(filters)
-    )
+    fun getAllClients(filters: ClientFilters): List<ClientDto> = clientService.findAll(filters)
 
     @GetMapping("{clientId}")
-    fun getById(@PathVariable clientId: String) = clientMapper.toApi(
-        clientService.findById(clientId)
-            .orElseThrow { ClientNotFoundException("Could not find client") }
-    )
+    fun getClientById(@PathVariable clientId: String): ClientDto = clientService.findClient(clientId)
+
+    @PostMapping
+    fun addClient(@RequestBody client: ClientDto): ClientDto = clientService.addClient(client)
+
+    @PatchMapping("{clientId}")
+    fun patchClient(
+        @PathVariable clientId: String,
+        @RequestBody client: ClientDto
+    ): ClientDto = clientService.patchClient(clientId, client)
+
+    @DeleteMapping("{clientId}")
+    fun deleteClient(@PathVariable clientId: String): ClientDto = clientService.deleteClient(clientId)
 
     @GetMapping("{clientId}/cart")
-    fun getClientCart(@PathVariable clientId: String) = clientService.getClientCart(clientId)
+    fun getClientCart(@PathVariable clientId: String): Cart = clientService.getClientCart(clientId)
+
+    @DeleteMapping("{clientId}/cart")
+    fun deleteClientCart(@PathVariable clientId: String): ClientDto = clientService.deleteClientCart(clientId)
 
     @PostMapping("{clientId}/cart")
     fun addBagToCart(
         @PathVariable clientId: String,
-        @RequestBody bag: GreenBagDto
-    ) = clientMapper.toApi(
-        clientService.addBagToCart(clientId, greenBagMapper.toEntity(bag))
-    )
+        @RequestBody bag: GreenBag
+    ): ClientDto = clientService.addBagToCart(clientId, bag)
 
-    //TODO add functionality for deleting a bag from the client cart
-
-    @PutMapping("{clientId}/cart")
-    fun updateClientCart(
+    @GetMapping("{clientId}/cart/{bagId}")
+    fun getBag(
         @PathVariable clientId: String,
-        @RequestBody cart: Cart
-    ) = clientMapper.toApi(
-        clientService.updateCartForClient(clientId, cart)
-    )
+        @PathVariable bagId: String
+    ): GreenBag = clientService.getBagForClient(clientId, bagId)
 
-    @PostMapping
-    fun addClient(@RequestBody client: ClientDto) = clientMapper.toApi(
-        clientService.addClient(clientMapper.toEntity(client))
-    )
-
-    @PutMapping("{clientId}")
-    fun updateClient(
+    @DeleteMapping("{clientId}/cart/{bagId}")
+    fun deleteBagFromCart(
         @PathVariable clientId: String,
-        @RequestBody client: ClientDto
-    ) = clientMapper.toApi(
-        clientService.updateClient(clientId, clientMapper.toEntity(client))
-    )
+        @PathVariable bagId: String
+    ): ClientDto = clientService.deleteBagFromCart(clientId, bagId)
 
-    @DeleteMapping("{clientId}")
-    fun deleteClient(@PathVariable clientId: String) = clientMapper.toApi(
-        clientService.deleteById(clientId)
-    )
+    @GetMapping("{clientId}/address")
+    fun getClientAddress(@PathVariable clientId: String): Address = clientService.getClientAddress(clientId)
+
+    @PatchMapping("{clientId}/address")
+    fun patchClientAddress(
+        @PathVariable clientId: String,
+        @RequestBody address: Address
+    ): ClientDto =
+        clientService.patchClientAddress(clientId, address)
+
+    @DeleteMapping("{clientId}/address")
+    fun deleteClientAddress(@PathVariable clientId: String): ClientDto = clientService.deleteClientAddress(clientId)
 }

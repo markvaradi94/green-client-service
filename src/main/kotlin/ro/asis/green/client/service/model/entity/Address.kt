@@ -1,6 +1,9 @@
 package ro.asis.green.client.service.model.entity
 
+import org.bson.types.ObjectId
+
 data class Address(
+    var _id: String = ObjectId.get().toHexString(),
     var city: String? = null,
     var zipCode: String? = null,
     var streetName: String? = null,

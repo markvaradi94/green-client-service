@@ -12,8 +12,8 @@ import java.util.Optional.ofNullable
 class ClientDao(private val mongo: MongoTemplate) {
 
     fun findClients(filters: ClientFilters): List<ClientEntity> {
-        var query = Query()
-        var criteria = buildCriteria(filters)
+        val query = Query()
+        val criteria = buildCriteria(filters)
 
         if (criteria.isNotEmpty()) query.addCriteria(Criteria().andOperator(*criteria.toTypedArray()))
 
@@ -21,10 +21,13 @@ class ClientDao(private val mongo: MongoTemplate) {
     }
 
     private fun buildCriteria(filters: ClientFilters): List<Criteria> {
-        var criteria = mutableListOf<Criteria>()
+        val criteria = mutableListOf<Criteria>()
 
         ofNullable(filters.firstName).ifPresent { criteria.add(Criteria.where("firstName").`is`(it)) }
         ofNullable(filters.lastName).ifPresent { criteria.add(Criteria.where("lastName").`is`(it)) }
+        ofNullable(filters.city).ifPresent { criteria.add(Criteria.where("address.city").`is`(it)) }
+        ofNullable(filters.streetNumber).ifPresent { criteria.add(Criteria.where("address.streetNumber").`is`(it)) }
+        ofNullable(filters.streetName).ifPresent { criteria.add(Criteria.where("address.streetName").`is`(it)) }
 
         return criteria
     }

@@ -3,12 +3,13 @@ package ro.asis.green.client.service.model.mappers
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Component
 import ro.asis.green.client.service.model.api.dto.ClientDto
+import ro.asis.green.client.service.model.entity.Address
+import ro.asis.green.client.service.model.entity.Cart
 import ro.asis.green.client.service.model.entity.ClientEntity
 
 @Component
 @RequiredArgsConstructor
 class ClientMapper(
-    private val addressMapper: AddressMapper
 ) : Mapper<ClientDto, ClientEntity> {
 
     //TODO write mapper interface or microservice to map all entities to DTO and back
@@ -19,7 +20,7 @@ class ClientMapper(
             accountId = source.accountId,
             firstName = source.firstName,
             lastName = source.lastName,
-            addresses = addressMapper.toApi(source.addresses) ?: mutableListOf(),
+            address = source.address,
             cart = source.cart
         )
     }
@@ -30,8 +31,8 @@ class ClientMapper(
             accountId = source.accountId,
             firstName = source.firstName,
             lastName = source.lastName,
-            addresses = addressMapper.toEntity(source.addresses) ?: mutableListOf(),
-            cart = source.cart
+            address = source.address ?: Address(),
+            cart = source.cart ?: Cart()
         )
     }
 }
