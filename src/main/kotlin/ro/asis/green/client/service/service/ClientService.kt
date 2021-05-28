@@ -39,6 +39,13 @@ class ClientService(
         )
     )
 
+    fun patchClient(clientId: String, client: ClientDto): ClientDto {
+        val dbClient = getOrThrow(clientId)
+        copyClient(client, dbClient)
+
+        return clientMapper.toApi(clientRepository.save(dbClient))
+    }
+
     fun deleteClient(clientId: String): ClientDto {
         val clientToDelete = getOrThrow(clientId)
         clientRepository.delete(clientToDelete)
@@ -54,13 +61,6 @@ class ClientService(
         val client = getOrThrow(clientId)
         client.cart = Cart()
         return clientMapper.toApi(clientRepository.save(client))
-    }
-
-    fun patchClient(clientId: String, client: ClientDto): ClientDto {
-        val dbClient = getOrThrow(clientId)
-        copyClient(client, dbClient)
-
-        return clientMapper.toApi(clientRepository.save(dbClient))
     }
 
     private fun copyClient(newClient: ClientDto, dbClient: ClientEntity) {

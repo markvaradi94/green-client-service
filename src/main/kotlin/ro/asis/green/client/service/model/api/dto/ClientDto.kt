@@ -10,5 +10,5 @@ data class ClientDto(
     var firstName: String?,
     var lastName: String?,
     var address: Address?,
-    var cart: Cart?,
+    var cart: Cart?
 )

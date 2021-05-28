@@ -17,7 +17,7 @@ class ClientDao(private val mongo: MongoTemplate) {
 
         if (criteria.isNotEmpty()) query.addCriteria(Criteria().andOperator(*criteria.toTypedArray()))
 
-        return mongo.find(query, ClientEntity::class.java)
+        return mongo.find(query, ClientEntity::class.java).toList()
     }
 
     private fun buildCriteria(filters: ClientFilters): List<Criteria> {
