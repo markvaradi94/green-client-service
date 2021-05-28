@@ -1,6 +1,7 @@
 package ro.asis.green.client.service.controller
 
 import org.springframework.web.bind.annotation.*
+import ro.asis.green.client.service.model.api.dto.ClientAccountDto
 import ro.asis.green.client.service.model.api.dto.ClientDto
 import ro.asis.green.client.service.model.entity.Address
 import ro.asis.green.client.service.model.entity.Cart
@@ -18,6 +19,10 @@ class ClientController(
 
     @GetMapping("{clientId}")
     fun getClientById(@PathVariable clientId: String): ClientDto = clientService.findClient(clientId)
+
+    @GetMapping("{clientId}/account")
+    fun getClientWithAccount(@PathVariable clientId: String): ClientAccountDto =
+        clientService.getClientWithAccount(clientId)
 
     @PostMapping
     fun addClient(@RequestBody client: ClientDto): ClientDto = clientService.addClient(client)

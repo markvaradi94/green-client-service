@@ -3,7 +3,10 @@ package ro.asis.green.client.service.service
 import com.mongodb.annotations.ThreadSafe
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
 import ro.asis.green.client.service.exceptions.ClientNotFoundException
+import ro.asis.green.client.service.model.api.dto.AccountDto
+import ro.asis.green.client.service.model.api.dto.ClientAccountDto
 import ro.asis.green.client.service.model.api.dto.ClientDto
 import ro.asis.green.client.service.model.entity.Address
 import ro.asis.green.client.service.model.entity.Cart
@@ -38,6 +41,20 @@ class ClientService(
             clientMapper.toEntity(client)
         )
     )
+
+    fun getClientWithAccount(clientId: String): ClientAccountDto {
+        val client = getOrThrow(clientId);
+        val accountDto = fetchAccountForClient(client)
+
+        return ClientAccountDto(clientMapper.toApi(client), accountDto)
+    }
+
+    private fun fetchAccountForClient(client: ClientEntity): AccountDto {
+        return RestTemplate().getForObject(
+            "http://localhost:8112/accounts/${client.accountId}",
+            AccountDto::class.java
+        ) ?: AccountDto()
+    }
 
     fun patchClient(clientId: String, client: ClientDto): ClientDto {
         val dbClient = getOrThrow(clientId)
