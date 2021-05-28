@@ -23,11 +23,16 @@ class ClientDao(private val mongo: MongoTemplate) {
     private fun buildCriteria(filters: ClientFilters): List<Criteria> {
         val criteria = mutableListOf<Criteria>()
 
-        ofNullable(filters.firstName).ifPresent { criteria.add(Criteria.where("firstName").`is`(it)) }
-        ofNullable(filters.lastName).ifPresent { criteria.add(Criteria.where("lastName").`is`(it)) }
-        ofNullable(filters.city).ifPresent { criteria.add(Criteria.where("address.city").`is`(it)) }
-        ofNullable(filters.streetNumber).ifPresent { criteria.add(Criteria.where("address.streetNumber").`is`(it)) }
-        ofNullable(filters.streetName).ifPresent { criteria.add(Criteria.where("address.streetName").`is`(it)) }
+        ofNullable(filters.firstName)
+            .ifPresent { criteria.add(Criteria.where("firstName").regex(".*$it.*", "i")) }
+        ofNullable(filters.lastName)
+            .ifPresent { criteria.add(Criteria.where("lastName").regex(".*$it.*", "i")) }
+        ofNullable(filters.city)
+            .ifPresent { criteria.add(Criteria.where("address.city").regex(".*$it.*", "i")) }
+        ofNullable(filters.streetNumber)
+            .ifPresent { criteria.add(Criteria.where("address.streetNumber").regex(".*$it.*", "i")) }
+        ofNullable(filters.streetName)
+            .ifPresent { criteria.add(Criteria.where("address.streetName").regex(".*$it.*", "i")) }
 
         return criteria
     }
