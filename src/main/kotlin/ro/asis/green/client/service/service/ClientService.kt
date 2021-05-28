@@ -6,14 +6,11 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import ro.asis.green.client.service.exceptions.ClientNotFoundException
 import ro.asis.green.client.service.model.api.dto.AccountDto
-import ro.asis.green.client.service.model.api.dto.ClientAccountDto
 import ro.asis.green.client.service.model.api.dto.ClientDto
-import ro.asis.green.client.service.model.entity.Address
-import ro.asis.green.client.service.model.entity.Cart
-import ro.asis.green.client.service.model.entity.ClientEntity
-import ro.asis.green.client.service.model.entity.GreenBag
+import ro.asis.green.client.service.model.entity.*
 import ro.asis.green.client.service.model.filters.ClientFilters
 import ro.asis.green.client.service.model.mappers.ClientMapper
+import ro.asis.green.client.service.repository.ClientAccountRepository
 import ro.asis.green.client.service.repository.ClientDao
 import ro.asis.green.client.service.repository.ClientRepository
 
@@ -21,8 +18,9 @@ import ro.asis.green.client.service.repository.ClientRepository
 @ThreadSafe
 class ClientService(
     private val clientRepository: ClientRepository,
+    private val clientAccountRepository: ClientAccountRepository,
     private val clientDao: ClientDao,
-    private val clientMapper: ClientMapper
+    private val clientMapper: ClientMapper,
 ) {
 
     companion object {
@@ -42,11 +40,16 @@ class ClientService(
         )
     )
 
-    fun getClientWithAccount(clientId: String): ClientAccountDto {
+    fun getClientAccount(clientId: String): ClientAccount {
         val client = getOrThrow(clientId);
         val accountDto = fetchAccountForClient(client)
 
-        return ClientAccountDto(clientMapper.toApi(client), accountDto)
+        val clientAccount = ClientAccount(
+            client = clientMapper.toApi(client),
+            account = accountDto
+        )
+
+        return clientAccountRepository.save(clientAccount)
     }
 
     private fun fetchAccountForClient(client: ClientEntity): AccountDto {
