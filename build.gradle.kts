@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+    implementation("io.github.microutils:kotlin-logging:2.0.6")
+    implementation("com.github.fge:json-patch:1.9")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")

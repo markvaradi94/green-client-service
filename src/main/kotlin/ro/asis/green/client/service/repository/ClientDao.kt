@@ -12,8 +12,8 @@ import java.util.Optional.ofNullable
 class ClientDao(private val mongo: MongoTemplate) {
 
     fun findClients(filters: ClientFilters): List<ClientEntity> {
-        var query = Query()
-        var criteria = buildCriteria(filters)
+        val query = Query()
+        val criteria = buildCriteria(filters)
 
         if (criteria.isNotEmpty()) query.addCriteria(Criteria().andOperator(*criteria.toTypedArray()))
 
@@ -21,10 +21,18 @@ class ClientDao(private val mongo: MongoTemplate) {
     }
 
     private fun buildCriteria(filters: ClientFilters): List<Criteria> {
-        var criteria = mutableListOf<Criteria>()
+        val criteria = mutableListOf<Criteria>()
 
-        ofNullable(filters.firstName).ifPresent { criteria.add(Criteria.where("firstName").`is`(it)) }
-        ofNullable(filters.lastName).ifPresent { criteria.add(Criteria.where("lastName").`is`(it)) }
+        ofNullable(filters.firstName)
+            .ifPresent { criteria.add(Criteria.where("firstName").regex(".*$it.*", "i")) }
+        ofNullable(filters.lastName)
+            .ifPresent { criteria.add(Criteria.where("lastName").regex(".*$it.*", "i")) }
+        ofNullable(filters.city)
+            .ifPresent { criteria.add(Criteria.where("address.city").regex(".*$it.*", "i")) }
+        ofNullable(filters.streetNumber)
+            .ifPresent { criteria.add(Criteria.where("address.streetNumber").regex(".*$it.*", "i")) }
+        ofNullable(filters.streetName)
+            .ifPresent { criteria.add(Criteria.where("address.streetName").regex(".*$it.*", "i")) }
 
         return criteria
     }

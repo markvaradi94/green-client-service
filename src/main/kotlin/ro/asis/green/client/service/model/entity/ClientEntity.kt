@@ -1,28 +1,26 @@
 package ro.asis.green.client.service.model.entity
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import lombok.Data
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import javax.validation.constraints.NotNull
 
 @Data
 @Document(collection = "clients")
 class ClientEntity(
     @Id
-    var id: String? = ObjectId.get().toHexString(),
+    var id: String = ObjectId.get().toHexString(),
 
-    @NotNull
-    val accountId: String?,
+    val accountId: String? = "",
 
-    @NotNull
-    var firstName: String?,
+    @JsonProperty
+    var firstName: String? = "",
 
-    @NotNull
-    var lastName: String?,
+    @JsonProperty
+    var lastName: String? = "",
 
-    @NotNull
-    var addresses: List<Address>? = mutableListOf(),
+    var address: Address = Address(),
 
-    var cart: Cart? = Cart()
+    var cart: Cart = Cart()
 )
