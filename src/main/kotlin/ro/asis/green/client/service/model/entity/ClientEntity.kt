@@ -1,6 +1,5 @@
 package ro.asis.green.client.service.model.entity
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import lombok.Data
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -14,10 +13,8 @@ class ClientEntity(
 
     val accountId: String? = "",
 
-    @JsonProperty
     var firstName: String? = "",
 
-    @JsonProperty
     var lastName: String? = "",
 
     var address: Address = Address(),

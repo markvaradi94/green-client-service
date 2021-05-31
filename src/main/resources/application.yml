@@ -1,0 +1,18 @@
+server:
+  port: 8111
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb+srv://mark:mazare123@greencluster.rewht.mongodb.net/GreenDB?retryWrites=true&w=majority"
+  application:
+    name: CLIENT-SERVICE
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost

@@ -2,6 +2,8 @@ package ro.asis.green.client.service.service
 
 import com.mongodb.annotations.ThreadSafe
 import mu.KotlinLogging
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
+import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import ro.asis.green.client.service.exceptions.ClientNotFoundException
@@ -21,8 +23,8 @@ class ClientService(
     private val clientAccountRepository: ClientAccountRepository,
     private val clientDao: ClientDao,
     private val clientMapper: ClientMapper,
+    private val restTemplate: RestTemplate
 ) {
-
     companion object {
         private val LOG = KotlinLogging.logger { }
     }
@@ -52,9 +54,10 @@ class ClientService(
         return clientAccountRepository.save(clientAccount)
     }
 
+    @LoadBalanced
     private fun fetchAccountForClient(client: ClientEntity): AccountDto {
-        return RestTemplate().getForObject(
-            "http://localhost:8112/accounts/${client.accountId}",
+        return restTemplate.getForObject(
+            "http://ACCOUNT-SERVICE/accounts/${client.accountId}",
             AccountDto::class.java
         ) ?: AccountDto()
     }
